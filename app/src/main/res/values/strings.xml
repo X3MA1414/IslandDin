@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Isla</string>
+    <string name="accessibility_label">Isla dinámica</string>
+    <string name="accessibility_description">Necesario para dibujar la isla alrededor de la cámara, encima de la barra de estado. Isla no lee ni guarda el contenido de tu pantalla.</string>
+    <string name="notification_listener_label">Isla: notificaciones y música</string>
+</resources>
