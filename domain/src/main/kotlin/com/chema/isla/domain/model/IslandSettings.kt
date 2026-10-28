@@ -16,6 +16,8 @@ data class IslandSettings(
     val showCharging: Boolean = true,
     val showIdlePill: Boolean = true,
     val hideInLandscape: Boolean = true,
+    /** Desactiva los avisos emergentes del sistema para que solo se vea la isla. */
+    val hideSystemHeadsUp: Boolean = false,
     val notificationDurationMillis: Long = DEFAULT_NOTIFICATION_DURATION,
     val chargingDurationMillis: Long = DEFAULT_CHARGING_DURATION,
     val pillWidthDp: Int = DEFAULT_PILL_WIDTH,

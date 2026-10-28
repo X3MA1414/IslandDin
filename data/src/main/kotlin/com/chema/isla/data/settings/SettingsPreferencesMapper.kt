@@ -20,6 +20,7 @@ object SettingsPreferencesMapper {
         val SHOW_CHARGING = booleanPreferencesKey("show_charging")
         val SHOW_IDLE = booleanPreferencesKey("show_idle_pill")
         val HIDE_LANDSCAPE = booleanPreferencesKey("hide_in_landscape")
+        val HIDE_SYSTEM_HEADS_UP = booleanPreferencesKey("hide_system_heads_up")
         val NOTIFICATION_DURATION = longPreferencesKey("notification_duration")
         val CHARGING_DURATION = longPreferencesKey("charging_duration")
         val PILL_WIDTH = intPreferencesKey("pill_width")
@@ -41,6 +42,7 @@ object SettingsPreferencesMapper {
             showCharging = p[Keys.SHOW_CHARGING] ?: d.showCharging,
             showIdlePill = p[Keys.SHOW_IDLE] ?: d.showIdlePill,
             hideInLandscape = p[Keys.HIDE_LANDSCAPE] ?: d.hideInLandscape,
+            hideSystemHeadsUp = p[Keys.HIDE_SYSTEM_HEADS_UP] ?: d.hideSystemHeadsUp,
             notificationDurationMillis = p[Keys.NOTIFICATION_DURATION] ?: d.notificationDurationMillis,
             chargingDurationMillis = p[Keys.CHARGING_DURATION] ?: d.chargingDurationMillis,
             pillWidthDp = p[Keys.PILL_WIDTH] ?: d.pillWidthDp,
@@ -63,6 +65,7 @@ object SettingsPreferencesMapper {
         p[Keys.SHOW_CHARGING] = settings.showCharging
         p[Keys.SHOW_IDLE] = settings.showIdlePill
         p[Keys.HIDE_LANDSCAPE] = settings.hideInLandscape
+        p[Keys.HIDE_SYSTEM_HEADS_UP] = settings.hideSystemHeadsUp
         p[Keys.NOTIFICATION_DURATION] = settings.notificationDurationMillis
         p[Keys.CHARGING_DURATION] = settings.chargingDurationMillis
         p[Keys.PILL_WIDTH] = settings.pillWidthDp

@@ -49,7 +49,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import com.chema.isla.data.system.AndroidHeadsUpController
 import androidx.compose.ui.unit.dp
 import com.chema.isla.domain.model.AppFilterMode
 import com.chema.isla.domain.model.IslandSettings
@@ -96,6 +101,11 @@ fun SettingsScreen(
             }
             section("Contenido") {
                 SwitchRow("Notificaciones", settings.showNotifications) { v -> onUpdate { it.copy(showNotifications = v) } }
+                SystemPopupsRow(
+                    checked = settings.hideSystemHeadsUp,
+                    available = permissions.canHideSystemPopups,
+                    onChange = { v -> onUpdate { it.copy(hideSystemHeadsUp = v) } },
+                )
                 SwitchRow("Música", settings.showMedia) { v -> onUpdate { it.copy(showMedia = v) } }
                 SwitchRow("Carga de batería", settings.showCharging) { v -> onUpdate { it.copy(showCharging = v) } }
                 SliderRow(
@@ -271,6 +281,47 @@ private fun PermissionRow(title: String, description: String, granted: Boolean, 
         if (!granted) {
             Spacer(Modifier.width(8.dp))
             OutlinedButton(onClick = onClick) { Text("Activar") }
+        }
+    }
+}
+
+/** Opción para que solo se vea la isla y no el aviso emergente del sistema. */
+@Composable
+private fun SystemPopupsRow(checked: Boolean, available: Boolean, onChange: (Boolean) -> Unit) {
+    val clipboard = LocalClipboardManager.current
+    Column(Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Text("Solo la isla")
+                Text(
+                    "Oculta los avisos emergentes del sistema. Siguen apareciendo en la barra de notificaciones.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            Spacer(Modifier.width(8.dp))
+            Switch(checked = checked && available, onCheckedChange = onChange, enabled = available)
+        }
+        if (!available) {
+            Spacer(Modifier.height(8.dp))
+            Text(
+                "Necesita un permiso que solo se da desde un ordenador, una vez. Con el móvil conectado por USB " +
+                    "y la depuración USB activada, ejecuta:",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.height(6.dp))
+            Text(
+                AndroidHeadsUpController.GRANT_COMMAND,
+                style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(8.dp))
+                    .padding(10.dp),
+            )
+            TextButton(onClick = { clipboard.setText(AnnotatedString(AndroidHeadsUpController.GRANT_COMMAND)) }) {
+                Text("Copiar comando")
+            }
         }
     }
 }

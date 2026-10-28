@@ -8,6 +8,7 @@ Isla dinámica estilo iPhone para Android (pensada para el Galaxy S24 Ultra), es
 - **Notificaciones**: se expande con el icono, título y texto. Al tocarla se abre la notificación.
 - **Música**: carátula y ecualizador en modo compacto. Al tocarla se expande con título, artista, progreso y controles. Con una pulsación larga se abre la app.
 - **Carga**: muestra un aviso al conectar o desconectar el cargador.
+- **Solo la isla** (opcional): oculta los avisos emergentes del sistema mientras la isla funciona y los restaura al detenerla. Requiere conceder un permiso por ADB una sola vez (ver abajo).
 - **Ajustes**: color de acento, duración, apps permitidas u ocultas y ocultar en horizontal.
 
 ## Arquitectura
@@ -58,3 +59,13 @@ Se necesita el JDK 17 o superior y el Android SDK, con `local.properties` o `AND
 2. Pulsa **Activar** en *Accesibilidad* y elige **Isla dinámica**.
    - Si aparece en gris porque la app no viene de Play Store, ve a *Información de la app → ⋮ → Permitir ajustes restringidos* y vuelve a intentarlo.
 3. Opcional, pero recomendado en Samsung: quita la restricción de batería.
+
+### Opción "Solo la isla"
+
+Para que no salgan a la vez la isla y el aviso emergente del sistema, concede este permiso **una sola vez** con el móvil conectado por USB y la depuración USB activada:
+
+```bash
+adb shell pm grant com.chema.isla android.permission.WRITE_SECURE_SETTINGS
+```
+
+Después activa *Contenido → Solo la isla*. Isla cambia el ajuste del sistema `heads_up_notifications_enabled` mientras está activa y lo vuelve a dejar como estaba al desactivarla.

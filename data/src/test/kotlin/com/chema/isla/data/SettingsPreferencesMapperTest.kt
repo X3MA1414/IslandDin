@@ -20,6 +20,7 @@ class SettingsPreferencesMapperTest {
         val settings = IslandSettings(
             enabled = false,
             showMedia = false,
+            hideSystemHeadsUp = true,
             pillWidthDp = 120,
             offsetYDp = -4,
             accentColorArgb = 0xFF0A84FFL,

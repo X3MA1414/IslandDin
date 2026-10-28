@@ -16,6 +16,13 @@ interface NotificationActions {
     fun dismiss(key: String)
 }
 
+/** Control de los avisos emergentes (heads-up) del propio sistema. */
+interface SystemHeadsUpController {
+    /** true si la app tiene permiso para cambiar el ajuste del sistema. */
+    val canControl: Boolean
+    fun setSystemHeadsUpEnabled(enabled: Boolean)
+}
+
 /** Reloj inyectable para poder testear lógica dependiente del tiempo. */
 fun interface Clock {
     fun nowMillis(): Long

@@ -68,6 +68,7 @@ class IslandAccessibilityService : AccessibilityService() {
             .onEach { settings ->
                 lastSettings = settings
                 reposition(settings)
+                container.syncSystemHeadsUp(settings, islandRunning = true)
             }
             .launchIn(serviceScope)
     }
@@ -113,6 +114,8 @@ class IslandAccessibilityService : AccessibilityService() {
     override fun onInterrupt() = Unit
 
     override fun onDestroy() {
+        // Nunca dejar al usuario sin avisos si la isla se detiene.
+        lastSettings?.let { appContainer.syncSystemHeadsUp(it, islandRunning = false) }
         overlay?.remove()
         overlay = null
         presenter = null

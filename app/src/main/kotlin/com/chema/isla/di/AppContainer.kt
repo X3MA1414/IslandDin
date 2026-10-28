@@ -10,6 +10,7 @@ import com.chema.isla.data.notification.AndroidNotificationActions
 import com.chema.isla.data.notification.AndroidNotificationExtractor
 import com.chema.isla.data.notification.InMemoryNotificationRepository
 import com.chema.isla.data.settings.DataStoreSettingsRepository
+import com.chema.isla.data.system.AndroidHeadsUpController
 import com.chema.isla.data.time.IntervalTicker
 import com.chema.isla.data.time.SystemClock
 import com.chema.isla.domain.policy.DefaultContentPriorityPolicy
@@ -20,6 +21,7 @@ import com.chema.isla.domain.usecase.GetSelectableAppsUseCase
 import com.chema.isla.domain.usecase.ObserveIslandContentUseCase
 import com.chema.isla.domain.usecase.ObserveSettingsUseCase
 import com.chema.isla.domain.usecase.OpenNotificationUseCase
+import com.chema.isla.domain.usecase.SyncSystemHeadsUpUseCase
 import com.chema.isla.domain.usecase.ToggleAppSelectionUseCase
 import com.chema.isla.domain.usecase.UpdateSettingsUseCase
 import com.chema.isla.island.AndroidAppIconProvider
@@ -47,6 +49,7 @@ class AppContainer(context: Context) {
     val mediaRepository = MediaSessionRepository(appContext, artworkStore)
     val batteryRepository = AndroidBatteryRepository(appContext, clock)
     val notificationActions = AndroidNotificationActions(appContext)
+    private val headsUpController = AndroidHeadsUpController(appContext)
     private val installedAppsRepository = AndroidInstalledAppsRepository(appContext.packageManager)
 
     /** Solo el listener de notificaciones escribe aquí. */
@@ -57,7 +60,7 @@ class AppContainer(context: Context) {
     val appIconProvider: AppIconProvider = AndroidAppIconProvider(appContext.packageManager)
     val artworkProvider = ArtworkProvider { key -> artworkStore.get(key) }
 
-    val permissionChecker: PermissionChecker = AndroidPermissionChecker(appContext)
+    val permissionChecker: PermissionChecker = AndroidPermissionChecker(appContext, headsUpController)
 
     // Casos de uso
     val observeSettings = ObserveSettingsUseCase(settingsRepository)
@@ -67,6 +70,7 @@ class AppContainer(context: Context) {
     val controlMedia = ControlMediaUseCase(mediaRepository, mediaRepository)
     val openNotification = OpenNotificationUseCase(notificationActions)
     val dismissNotification = DismissNotificationUseCase(notificationActions)
+    val syncSystemHeadsUp = SyncSystemHeadsUpUseCase(headsUpController)
     val observeIslandContent = ObserveIslandContentUseCase(
         notificationRepository = notificationRepository,
         mediaRepository = mediaRepository,
