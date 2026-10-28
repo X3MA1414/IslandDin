@@ -18,7 +18,8 @@ class SettingsAndActionUseCasesTest {
     @Test
     fun `update settings normalizes invalid values`() = runTest {
         val repo = FakeSettingsRepository()
-        UpdateSettingsUseCase(repo) { it.copy(pillWidthDp = 9_999) }
+        val updateSettings = UpdateSettingsUseCase(repo)
+        updateSettings { it.copy(pillWidthDp = 9_999) }
         assertEquals(IslandSettings.PILL_WIDTH_RANGE.last, repo.state.value.pillWidthDp)
     }
 
